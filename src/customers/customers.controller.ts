@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
 import { CustomersService } from './customers.service';
 import { Customers } from './interfaces/customers.interface';
+import { CustomersDto } from './dto/customers.dto/customers.dto';
 
 
 
@@ -32,12 +33,15 @@ export class CustomersController {
       }
     
       @Post()
-      @HttpCode(HttpStatus.CREATED)
-      createCustomers(
-        @Body() body,
+      @HttpCode(HttpStatus.OK)
+      createCustomer(
+          @Body() customerDto: CustomersDto,
       ) {
-        return this.customerService.insert(body);
+          this.customerService.insert(customerDto);
+          return { message: 'Agregado correctamente'};
       }
+  
+
       @Put(':id')
       update(
         @Param('id') id: number, 

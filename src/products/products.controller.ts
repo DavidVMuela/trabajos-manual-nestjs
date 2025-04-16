@@ -13,21 +13,26 @@ export class ProductsController {
   }
 
   @Get(':id')
-  find(@Param('id') id: number) {
+  find(@Param('id', ParseIntPipe) id: number) {
     return this.productsService.getId(id);
   }
 
   @Post()
-  @HttpCode(HttpStatus.NO_CONTENT)
-  createProduct(
-    @Body() body,
+  @HttpCode(201)
+  createProducts(
+      @Body('name') name: string,
+      @Body('description') description: string
   ) {
-    this.productsService.insert(body);
+      this.productsService.insert({
+          id: this.productsService.getAll().length,
+          name,
+          description
+      });
   }
 
   @Put(':id')
   update(
-    @Param('id') id: number, 
+    @Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE})) id: number, 
     @Body() body,
   ) {
     return this.productsService.update(id, body);
